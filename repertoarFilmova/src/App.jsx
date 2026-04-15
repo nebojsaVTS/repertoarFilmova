@@ -1,6 +1,11 @@
 import React from "react";
+import Movie from "./Movie";
 
 const today = new Date();
+const day = today.getDate();
+const month = today.getMonth() + 1;
+const year = today.getFullYear();
+const formattedDate = `${day}.${month}.${year}.`;
 
 const App = () => {
   const movies = [
@@ -22,9 +27,18 @@ const App = () => {
   ];
 
   return (
-    <div>
-      <h1>{today.toDateString()}</h1>
-    </div>
+    <>
+      <h1>Repertoar za danas ({formattedDate})</h1>
+
+      {movies.map((movie, index) => (
+        <Movie
+          key={index}
+          title={movie.title}
+          hall={movie.hall}
+          price={movie.price}
+        />
+      ))}
+    </>
   );
 };
 

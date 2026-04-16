@@ -3,14 +3,11 @@ import React from "react";
 const Movie = (props) => {
   return (
     <div style={{ display: "flex", gap: "10px" }}>
-      <img
-        src="https://i.pinimg.com/736x/aa/f7/05/aaf705e06726ce3881288ae4be3ac5fe.jpg"
-        alt="movie"
-        width={"60px"}
-        height={"60px"}
-      />
+      <img src={props.poster} alt="movie" width="120" height="120" />
       <p>
-        {props.title}, sala:{props.hall}, cena:{props.price}din
+        {props.title}, sala:
+        {!props.hall ? " Film još uvek nije u ponudi" : ` ${props.hall}`}, cena:
+        {!props.price ? " 300" : ` ${props.price}`}din
       </p>
     </div>
   );

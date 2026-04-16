@@ -42,6 +42,10 @@ const App = () => {
     },
   ];
 
+  const handleReaction = (title, action) => {
+    alert(`Dodelili ste ${action} za film ${title}!`);
+  };
+
   return (
     <>
       <h1>Repertoar za danas ({formattedDate})</h1>
@@ -53,6 +57,7 @@ const App = () => {
           hall={movie.hall}
           price={movie.price}
           poster={movie.poster}
+          onReact={handleReaction}
         />
       ))}
     </>

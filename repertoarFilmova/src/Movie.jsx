@@ -29,6 +29,7 @@ const Movie = (props) => {
           <button onClick={() => props.onReact(props.title, "Dislike")}>
             Dislike
           </button>
+          <button onClick={() => props.onEdit(props.movie)}>Edit</button>
         </div>
       </div>
     </div>

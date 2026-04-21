@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Movie from "./Movie";
+import MovieForm from "./MovieForm";
 
 const Movies = () => {
   const today = new Date();
@@ -7,6 +8,8 @@ const Movies = () => {
   const month = today.getMonth() + 1;
   const year = today.getFullYear();
   const formattedDate = `${day}.${month}.${year}.`;
+
+  const [editingMovie, setEditingMovie] = useState(null);
 
   const [movies, setMovies] = useState([
     {
@@ -53,7 +56,7 @@ const Movies = () => {
   ]);
 
   const handleReaction = (title, action) => {
-    const updateMovies = movies.map((movie) => {
+    const updatedMovies = movies.map((movie) => {
       if (movie.title === title) {
         if (action === "Like") {
           return { ...movie, likes: movie.likes + 1 };
@@ -63,12 +66,57 @@ const Movies = () => {
       }
       return movie;
     });
-    setMovies(updateMovies);
+    setMovies(updatedMovies);
+  };
+
+  const handleEditClick = (movie) => {
+    setEditingMovie(movie);
+  };
+
+  const handleSaveMovie = (movieData) => {
+    if (editingMovie) {
+      const updatedMovies = movies.map((movie) =>
+        movie.title === editingMovie.title
+          ? {
+              ...movie,
+              title: movieData.title,
+              hall: movieData.hall,
+              price: movieData.price,
+              poster: movieData.poster,
+            }
+          : movie,
+      );
+
+      setMovies(updatedMovies);
+      setEditingMovie(null);
+    } else {
+      setMovies([
+        ...movies,
+        {
+          ...movieData,
+          likes: 0,
+          dislikes: 0,
+        },
+      ]);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingMovie(null);
   };
 
   return (
     <>
       <h1>Repertoar za danas ({formattedDate})</h1>
+
+      <MovieForm
+        key={editingMovie ? editingMovie.title : "new"}
+        onSaveMovie={handleSaveMovie}
+        editingMovie={editingMovie}
+        onCancelEdit={handleCancelEdit}
+      />
+
+      <br />
 
       {movies.map((movie, index) => (
         <Movie
@@ -80,6 +128,8 @@ const Movies = () => {
           likes={movie.likes}
           dislikes={movie.dislikes}
           onReact={handleReaction}
+          onEdit={handleEditClick}
+          movie={movie}
         />
       ))}
     </>

@@ -7,13 +7,19 @@ const Movie = (props) => {
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
           <img src={props.poster} alt="movie" width="110" height="150" />
 
-          <p>
-            {props.title},{" "}
-            {!props.hall
-              ? "Film još uvek nije u ponudi"
-              : `sala: ${props.hall}`}
-            , cena: {!props.price ? 300 : props.price}din
-          </p>
+          <div>
+            <p>
+              {props.title},{" "}
+              {!props.hall
+                ? "Film još uvek nije u ponudi"
+                : `sala: ${props.hall}`}
+              , cena: {!props.price ? 300 : props.price}din
+            </p>
+
+            <p>
+              Likes: {props.likes} | Dislikes: {props.dislikes}
+            </p>
+          </div>
         </div>
 
         <div style={{ display: "flex", gap: "15px", marginTop: "5px" }}>

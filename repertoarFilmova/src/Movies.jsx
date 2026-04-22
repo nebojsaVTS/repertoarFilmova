@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Movie from "./Movie";
 import MovieForm from "./MovieForm";
 
@@ -10,6 +10,7 @@ const Movies = () => {
   const formattedDate = `${day}.${month}.${year}.`;
 
   const [editingMovie, setEditingMovie] = useState(null);
+  const [bestMovie, setBestMovie] = useState(null);
 
   const [movies, setMovies] = useState([
     {
@@ -55,6 +56,31 @@ const Movies = () => {
     },
   ]);
 
+  useEffect(() => {
+    console.log("Postavka filmova");
+
+    return () => {
+      console.log("Sklanjanje filmova");
+    };
+  }, []);
+
+  useEffect(() => {
+    if (movies.length > 0) {
+      let topMovie = movies[0];
+
+      movies.forEach((movie) => {
+        const currentScore = movie.likes - movie.dislikes;
+        const topScore = topMovie.likes - topMovie.dislikes;
+
+        if (currentScore > topScore) {
+          topMovie = movie;
+        }
+      });
+
+      setBestMovie(topMovie);
+    }
+  }, [movies]);
+
   const handleReaction = (title, action) => {
     const updatedMovies = movies.map((movie) => {
       if (movie.title === title) {
@@ -66,6 +92,7 @@ const Movies = () => {
       }
       return movie;
     });
+
     setMovies(updatedMovies);
   };
 
@@ -94,8 +121,8 @@ const Movies = () => {
         ...movies,
         {
           ...movieData,
-          likes: 0,
-          dislikes: 0,
+          likes: Math.floor(Math.random() * 5) + 1,
+          dislikes: Math.floor(Math.random() * 5) + 1,
         },
       ]);
     }
@@ -108,6 +135,24 @@ const Movies = () => {
   return (
     <>
       <h1>Repertoar za danas ({formattedDate})</h1>
+
+      {bestMovie && (
+        <div
+          style={{
+            marginBottom: "20px",
+            padding: "10px",
+            border: "1px solid black",
+          }}
+        >
+          <h2>Najbolje ocenjen film</h2>
+          <p>
+            {bestMovie.title} | Ocena: {bestMovie.likes - bestMovie.dislikes}
+          </p>
+          <p>
+            Likes: {bestMovie.likes} | Dislikes: {bestMovie.dislikes}
+          </p>
+        </div>
+      )}
 
       <MovieForm
         key={editingMovie ? editingMovie.title : "new"}

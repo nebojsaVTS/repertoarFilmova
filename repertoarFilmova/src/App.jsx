@@ -7,6 +7,7 @@ import About from "./About";
 import Movies from "./Movies";
 import AppInfo from "./AppInfo";
 import AuthorInfo from "./AuthorInfo";
+import MovieForm from "./MovieForm";
 
 const App = () => {
   return (
@@ -18,6 +19,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/movies" element={<Movies />} />
+          <Route path="/movies/new" element={<MovieForm />} />
+          <Route path="/movies/edit/:id" element={<MovieForm />} />
 
           <Route path="/about" element={<About />}>
             <Route path="app" element={<AppInfo />} />

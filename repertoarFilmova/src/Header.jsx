@@ -6,7 +6,7 @@ const Header = () => {
     <header>
       <h2>Repertoar filmova</h2>
 
-      <nav style={{ display: "flex", gap: "15px" }}>
+      <nav style={{ display: "flex", gap: "20px" }}>
         <Link to="/" style={{ textDecoration: "none", marginRight: "15px" }}>
           Home
         </Link>
@@ -18,6 +18,9 @@ const Header = () => {
         </Link>
         <Link to="/movies" style={{ textDecoration: "none" }}>
           Movies
+        </Link>
+        <Link to="/movies/new" style={{ textDecoration: "none" }}>
+          Add Movie
         </Link>
       </nav>
     </header>

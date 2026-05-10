@@ -23,13 +23,14 @@ const Movie = (props) => {
         </div>
 
         <div style={{ display: "flex", gap: "15px", marginTop: "5px" }}>
-          <button onClick={() => props.onReact(props.title, "Like")}>
+          <button onClick={() => props.onReact(props.movie.id, "Like")}>
             Like
           </button>
-          <button onClick={() => props.onReact(props.title, "Dislike")}>
+          <button onClick={() => props.onReact(props.movie.id, "Dislike")}>
             Dislike
           </button>
           <button onClick={() => props.onEdit(props.movie)}>Edit</button>
+          <button onClick={() => props.onDelete(props.movie.id)}>Delete</button>
         </div>
       </div>
     </div>

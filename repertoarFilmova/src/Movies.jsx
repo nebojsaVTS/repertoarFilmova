@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Movie from "./Movie";
-import MovieForm from "./MovieForm";
-import { getMovies } from "./services/movieService";
+import {
+  getMovies,
+  likeMovie,
+  dislikeMovie,
+  deleteMovie,
+} from "./services/movieService";
 import { useNavigate } from "react-router-dom";
 
 const Movies = () => {
@@ -11,7 +15,6 @@ const Movies = () => {
   const year = today.getFullYear();
   const formattedDate = `${day}.${month}.${year}.`;
 
-  const [editingMovie, setEditingMovie] = useState(null);
   const [bestMovie, setBestMovie] = useState(null);
 
   const [movies, setMovies] = useState([]);
@@ -56,58 +59,38 @@ const Movies = () => {
       });
 
       setBestMovie(topMovie);
+    } else {
+      setBestMovie(null);
     }
   }, [movies]);
 
-  const handleReaction = (title, action) => {
-    const updatedMovies = movies.map((movie) => {
-      if (movie.name === title) {
-        if (action === "Like") {
-          return { ...movie, likes: movie.likes + 1 };
-        } else {
-          return { ...movie, dislikes: movie.dislikes + 1 };
-        }
+  const handleReaction = async (id, action) => {
+    try {
+      if (action === "Like") {
+        await likeMovie(id);
+      } else {
+        await dislikeMovie(id);
       }
-      return movie;
-    });
+      const response = await getMovies();
+      setMovies(response.data);
+    } catch (error) {
+      setError("Greška pri reakciji na film.");
+    }
+  };
 
-    setMovies(updatedMovies);
+  const handleDelete = async (id) => {
+    try {
+      await deleteMovie(id);
+
+      const response = await getMovies();
+      setMovies(response.data);
+    } catch (error) {
+      setError("Greška pri brisanju filma.");
+    }
   };
 
   const handleEditClick = (movie) => {
     navigate(`/movies/edit/${movie.id}`);
-  };
-
-  const handleSaveMovie = (movieData) => {
-    if (editingMovie) {
-      const updatedMovies = movies.map((movie) =>
-        movie.title === editingMovie.title
-          ? {
-              ...movie,
-              title: movieData.title,
-              hall: movieData.hall,
-              price: movieData.price,
-              poster: movieData.poster,
-            }
-          : movie,
-      );
-
-      setMovies(updatedMovies);
-      setEditingMovie(null);
-    } else {
-      setMovies([
-        ...movies,
-        {
-          ...movieData,
-          likes: Math.floor(Math.random() * 5) + 1,
-          dislikes: Math.floor(Math.random() * 5) + 1,
-        },
-      ]);
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setEditingMovie(null);
   };
 
   return (
@@ -135,18 +118,9 @@ const Movies = () => {
         </div>
       )}
 
-      <MovieForm
-        key={editingMovie ? editingMovie.id : "new"}
-        onSaveMovie={handleSaveMovie}
-        editingMovie={editingMovie}
-        onCancelEdit={handleCancelEdit}
-      />
-
-      <br />
-
-      {movies.map((movie, index) => (
+      {movies.map((movie) => (
         <Movie
-          key={index}
+          key={movie.id}
           title={movie.name}
           hall={movie.hall}
           price={movie.price}
@@ -155,6 +129,7 @@ const Movies = () => {
           dislikes={movie.dislikes}
           onReact={handleReaction}
           onEdit={handleEditClick}
+          onDelete={handleDelete}
           movie={movie}
         />
       ))}

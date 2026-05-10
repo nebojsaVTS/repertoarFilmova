@@ -17,3 +17,15 @@ export const getMovieById = async (id) => {
 export const updateMovie = async (id, movie) => {
     return await axios.put(`${API_URL}/${id}`, movie)
 }
+
+export const likeMovie = async (id) => {
+    return await axios.put(`${API_URL}/${id}/like`)
+}
+
+export const dislikeMovie = async (id) => {
+    return await axios.put(`${API_URL}/${id}/dislike`)
+}
+
+export const deleteMovie = async (id) => {
+    return await axios.delete(`${API_URL}/${id}`)
+}

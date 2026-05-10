@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { addMovie, getMovieById, updateMovie } from "./services/movieService";
 import { useNavigate, useParams } from "react-router-dom";
 
-const MovieForm = ({ onSaveMovie, editingMovie, onCancelEdit }) => {
-  const [title, setTitle] = useState(editingMovie ? editingMovie.title : "");
-  const [hall, setHall] = useState(editingMovie ? editingMovie.hall : "");
-  const [price, setPrice] = useState(editingMovie ? editingMovie.price : "");
-  const [poster, setPoster] = useState(editingMovie ? editingMovie.poster : "");
+const MovieForm = () => {
+  const [title, setTitle] = useState("");
+  const [hall, setHall] = useState("");
+  const [price, setPrice] = useState("");
+  const [poster, setPoster] = useState("");
+  const [likes, setLikes] = useState(0);
+  const [dislikes, setDislikes] = useState(0);
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -23,6 +25,8 @@ const MovieForm = ({ onSaveMovie, editingMovie, onCancelEdit }) => {
           setHall(movie.hall);
           setPrice(movie.price);
           setPoster(movie.poster);
+          setLikes(movie.likes);
+          setDislikes(movie.dislikes);
         } catch (error) {
           setError("Greška pri učitavanju filma.");
         }
@@ -45,10 +49,13 @@ const MovieForm = ({ onSaveMovie, editingMovie, onCancelEdit }) => {
     }
 
     const movieData = {
+      id: id ? Number(id) : 0,
       name: title,
       hall: Number(hall),
       price: Number(price),
       poster,
+      likes,
+      dislikes,
     };
 
     try {
@@ -99,14 +106,7 @@ const MovieForm = ({ onSaveMovie, editingMovie, onCancelEdit }) => {
         {error && <p style={{ color: "red" }}>{error}</p>}
       </div>
       <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
-        <button type="submit">
-          {editingMovie ? "Save Changes" : "Add Movie"}
-        </button>
-        {editingMovie && (
-          <button type="button" onClick={onCancelEdit}>
-            Cancel
-          </button>
-        )}
+        <button type="submit">{id ? "Save Changes" : "Add Movie"}</button>
       </div>
     </form>
   );
